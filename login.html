@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRT Login</title>
+    <style>
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* CRT scanlines */
+            position: relative;
+            overflow: hidden;
+        }
+        .crt {
+            background: rgba(0,0,0,0.8);
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 40px #00ff00, 0 0 10px #00ff00 inset;
+            border: 2px solid #00ff00;
+            position: relative;
+            width: 320px;
+            animation: flicker 1.5s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            10% { opacity: 0.95; }
+            20% { opacity: 0.98; }
+            30% { opacity: 0.92; }
+            40% { opacity: 0.99; }
+            50% { opacity: 0.93; }
+            60% { opacity: 1; }
+            70% { opacity: 0.97; }
+            80% { opacity: 0.94; }
+            90% { opacity: 1; }
+        }
+        .crt::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0,255,0,0.05) 0px,
+                rgba(0,255,0,0.05) 1px,
+                transparent 2px,
+                transparent 4px
+            );
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            text-shadow: 0 0 8px #00ff00;
+            letter-spacing: 2px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            text-shadow: 0 0 4px #00ff00;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 18px;
+            background: #111;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: inherit;
+            font-size: 1em;
+            border-radius: 4px;
+            outline: none;
+            box-shadow: 0 0 8px #00ff00 inset;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            font-family: inherit;
+            font-size: 1.1em;
+            border-radius: 4px;
+            cursor: pointer;
+            text-shadow: 0 0 4px #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+            transition: background 0.2s;
+        }
+        input[type="submit"]:hover {
+            background: #111;
+        }
+        .crt-power-on {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: crtOn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .crt-flash {
+            width: 100vw;
+            height: 8px;
+            background: #00ff00;
+            box-shadow: 0 0 80px 40px #00ff00;
+            opacity: 0.9;
+            border-radius: 4px;
+            animation: crtFlash 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes crtOn {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+        @keyframes crtFlash {
+            0% { height: 8px; opacity: 1; }
+            30% { height: 80vh; opacity: 1; }
+            60% { height: 8px; opacity: 0.8; }
+            100% { height: 8px; opacity: 0; }
+        }
+        body.loaded .crt-power-on {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="crt-power-on">
+        <div class="crt-flash"></div>
+    </div>
+    <form class="crt" style="opacity:0; transition: opacity 0.5s 0.8s;">
+        <h2>CRT LOGIN</h2>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+        <input type="submit" value="Log In">
+    </form>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.body.classList.add('loaded');
+                document.querySelector('.crt').style.opacity = 1;
+            }, 1100);
+        });
+    </script>
+</body>
+</html>
